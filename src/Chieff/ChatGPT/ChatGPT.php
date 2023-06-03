@@ -163,7 +163,7 @@ class ChatGPT extends Connector {
         if ($data) {
             if (!isset($data["model"]) || !$data["model"])
                 $data["model"] = "gpt-3.5-turbo";
-            $data = json_encode($data, JSON_UNESCAPED_UNICODE);
+            $data = json_encode($data);
             $headers[] = "Content-Type: application/json";
             $headers[] = "Content-Length: " . mb_strlen($data);
         }
