@@ -1,0 +1,15 @@
+{
+    "name": "chieff/chatgpt",
+    "autoload": {
+        "psr-4": {
+            "Chieff\\": "src/Chieff"
+        }
+    },
+    "authors": [
+        {
+            "name": "chieff",
+            "email": "itsabodyshotsc@mail.ru"
+        }
+    ],
+    "require": {}
+}
