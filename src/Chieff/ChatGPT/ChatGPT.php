@@ -18,7 +18,8 @@ class ChatGPT extends Connector {
         $this->token = $token;
         $this->orgId = $orgId;
         $this->model = $model;
-        $this->receiver();
+        if (!$this->receiver())
+            $this->clearChat();
     }
 
     public function testConnection()
@@ -65,7 +66,7 @@ class ChatGPT extends Connector {
             $this->setStatus(false, "Message's role key must be system, user or assistant!");
             return false;
         }
-        if (!isset($message["content"]) || (!$content = $this->validateField($message["content"], true,300))) {
+        if (!isset($message["content"]) || (!$content = $this->validateField($message["content"], true, 1000))) {
             $this->setStatus(false, "Message doesn't contain a content key or it's invalid, max length - 300!");
             return false;
         }
@@ -226,7 +227,7 @@ class ChatGPT extends Connector {
         $status = true;
         if (!is_array($answer)) {
             $this->setStatus(false, "Something went wrong, answer is invalid!");
-            $status = false;
+            return false;
         }
         if (
             isset($answer["error"]) &&
@@ -234,10 +235,6 @@ class ChatGPT extends Connector {
             isset($answer["error"]["message"])
         ) {
             $this->setStatus(false, "Error request: " . $answer["error"]["type"] . " : " . $answer["error"]["message"]);
-            $status = false;
-        }
-        if (!$status) {
-            $this->clearChat();
             return false;
         }
         $message = ["role" => "assistant"];
@@ -252,7 +249,6 @@ class ChatGPT extends Connector {
             $this->setMessagesSession();
         } else {
             $this->setStatus(false, "Something went wrong, answer is invalid!");
-            $this->clearChat();
             return false;
         }
         return true;
